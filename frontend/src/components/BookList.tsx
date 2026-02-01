@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { fetchBooks, createBook, type Book } from "../api/books-api";
 import { BookItem } from "./BookItem";
 
+function isValidUrl(value: string): boolean {
+    try {
+        new URL(value);
+        return true;
+    } catch {
+        return false;
+    }
+}
+
 export function BookList() {
     const [books, setBooks] = useState<Book[]>([]);
     const [loading, setLoading] = useState(true);
@@ -11,13 +20,12 @@ export function BookList() {
     const [description, setDescription] = useState("");
     const [imageUrl, setImageUrl] = useState("");
 
-    // initial fetch
     useEffect(() => {
         async function loadBooks() {
             try {
                 const data = await fetchBooks();
                 setBooks(data);
-            } catch (err) {
+            } catch {
                 setError("Failed to load books.");
             } finally {
                 setLoading(false);
@@ -30,25 +38,33 @@ export function BookList() {
     async function handleAddBook() {
         setError(null);
 
-        if (!title.trim()) {
+        const trimmedTitle = title.trim();
+        const trimmedDescription = description.trim();
+        const trimmedImageUrl = imageUrl.trim();
+
+        if (!trimmedTitle) {
             setError("Title is required.");
+            return;
+        }
+
+        if (trimmedImageUrl && !isValidUrl(trimmedImageUrl)) {
+            setError("Image URL must be a valid URL.");
             return;
         }
 
         try {
             const newBook = await createBook({
-                title: title.trim(),
-                description: description.trim() || undefined,
-                imageUrl: imageUrl.trim() || undefined,
+                title: trimmedTitle,
+                description: trimmedDescription || undefined,
+                imageUrl: trimmedImageUrl || undefined,
             });
 
             setBooks((prev) => [...prev, newBook]);
 
-            // reset form
             setTitle("");
             setDescription("");
             setImageUrl("");
-        } catch (err) {
+        } catch {
             setError("Failed to add new book.");
         }
     }
@@ -76,7 +92,8 @@ export function BookList() {
                     onChange={(e) => setImageUrl(e.target.value)}
                 />
 
-                <textarea
+                <input
+                    type="text"
                     placeholder="Description (optional)"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}

@@ -92,3 +92,19 @@ body {
 .book-content button {
   margin-top: 8px;
 }
+
+.book-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.book-form input,
+.book-form textarea {
+  padding: 6px;
+}
+
+.error {
+  color: #d33;
+}
