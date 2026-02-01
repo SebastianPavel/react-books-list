@@ -13,6 +13,8 @@ export function BookItem({ book }: Props) {
     const hasDescription =
         typeof book.description === "string" && book.description.trim().length > 0;
 
+    const descriptionId = `book-description-${book.id}`;
+
     return (
         <div className="book-item">
             <img
@@ -32,11 +34,14 @@ export function BookItem({ book }: Props) {
                             type="button"
                             onClick={() => setShowDescription((v) => !v)}
                             aria-expanded={showDescription}
+                            aria-controls={descriptionId}
                         >
                             {showDescription ? "Hide description" : "Show description"}
                         </button>
 
-                        {showDescription && <p>{book.description}</p>}
+                        {showDescription && (
+                            <p id={descriptionId}>{book.description}</p>
+                        )}
                     </>
                 ) : (
                     <p className="book-no-description">No description available.</p>

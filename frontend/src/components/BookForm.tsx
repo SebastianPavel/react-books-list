@@ -51,35 +51,45 @@ export function BookForm({ onSubmit }: Props) {
 
     return (
         <div className="book-form">
-            <input
-                type="text"
-                placeholder="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                disabled={submitting}
-            />
+            <label>
+                Title
+                <input
+                    type="text"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    aria-invalid={!!error}
+                />
+            </label>
 
-            <input
-                type="text"
-                placeholder="Image URL (optional)"
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-                disabled={submitting}
-            />
+            <label>
+                Image URL (optional)
+                <input
+                    type="text"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
+                    aria-invalid={!!error}
+                />
+            </label>
 
-            <input
-                type="text"
-                placeholder="Description (optional)"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                disabled={submitting}
-            />
+            <label>
+                Description (optional)
+                <input
+                    type="text"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                />
+            </label>
 
             <button type="button" onClick={handleSubmit} disabled={submitting}>
-                {submitting ? "Adding..." : "Add new book"}
+                {submitting ? "Adding…" : "Add new book"}
             </button>
 
-            {error && <p className="error">{error}</p>}
+            {error && (
+                <p className="error" role="alert">
+                    {error}
+                </p>
+            )}
         </div>
+
     );
 }
