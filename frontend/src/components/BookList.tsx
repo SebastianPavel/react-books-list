@@ -1,15 +1,8 @@
 import { useEffect, useState } from "react";
 import { fetchBooks, createBook, type Book } from "../api/books-api";
 import { BookItem } from "./BookItem";
+import { isValidUrl } from "../utils/is-valid-url";
 
-function isValidUrl(value: string): boolean {
-    try {
-        new URL(value);
-        return true;
-    } catch {
-        return false;
-    }
-}
 
 export function BookList() {
     const [books, setBooks] = useState<Book[]>([]);
